@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
     this.counter = 42;
   }
 
-  incrementCounter() {
+  public incrementCounter() {
     this.counter++;
   }
 
