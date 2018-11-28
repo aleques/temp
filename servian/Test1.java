@@ -1,20 +1,22 @@
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Test1 {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        System.out.println(calculateTax(180001));
-        System.out.println(calculateTax(37009));
-        System.out.println(calculateTax(0));
-        System.out.println(calculateTax(1));
-        System.out.println(calculateTax(2));
-        System.out.println(calculateTax(18200f));
-        System.out.println(calculateTax(18201f));
+        NumberFormat nf = new DecimalFormat("0.00");
+
+        System.out.println(nf.format(calculateTax(180001)));
+        System.out.println(nf.format(calculateTax(37009)));
+        System.out.println(nf.format(calculateTax(0)));
+        System.out.println(nf.format(calculateTax(1)));
+        System.out.println(nf.format(calculateTax(2)));
+        System.out.println(nf.format(calculateTax(18200)));
+        System.out.println(nf.format(calculateTax(18201)));
     }
 
     // Complete the calculateTax function below.
@@ -26,23 +28,16 @@ public class Test1 {
 
         List<TaxInfo> taxInfoList = new ArrayList<>();
 
-        taxInfoList.add(new TaxInfo(1f, 18200f, 0f));
-        taxInfoList.add(new TaxInfo(18201f, 37000f, 0.19f));
-        taxInfoList.add(new TaxInfo(37001f, 87000f, 0.325f));
-        taxInfoList.add(new TaxInfo(87001f, 180000f, 0.37f));
-        taxInfoList.add(new TaxInfo(180001f, null, 0.45f));
-        Collections.reverse(taxInfoList);
+        taxInfoList.add(new TaxInfo(1, 18200f, 0f));
+        taxInfoList.add(new TaxInfo(18201, 37000f, 0.19f));
+        taxInfoList.add(new TaxInfo(37001, 87000f, 0.325f));
+        taxInfoList.add(new TaxInfo(87001, 180000f, 0.37f));
+        taxInfoList.add(new TaxInfo(180001, null, 0.45f));
 
-        float finalTax = 0f;
+        float finalTax = 0;
 
         for (TaxInfo taxInfo : taxInfoList) {
-
-            float taxableValue = taxInfo.getTaxableValue(income);
-
-            if (taxableValue > 0) {
-                finalTax += taxInfo.getTaxPerDollar() * taxableValue;
-                income -= taxableValue;
-            }
+            finalTax += taxInfo.getTax(income);
         }
 
         return getDecimalRoundUp(finalTax);
@@ -69,24 +64,20 @@ public class Test1 {
             return incomeValue >= minIncome && (maxIncome == null || incomeValue <= maxIncome);
         }
 
-        public float getTaxableValue(Float incomeValue){
+        public float getTax(Float incomeValue) {
 
-            if (incomeValue > 0 && isIncomeInRange(incomeValue)) {
-                Float taxableValue = incomeValue - minIncome + 1;
-                return taxableValue;
-            } else {
-                return 0f;
+            float value = 0;
+
+            if (incomeValue > 0) {
+                if (isIncomeInRange(incomeValue)) {
+                    value = incomeValue - minIncome + 1;
+                } else if (maxIncome != null && incomeValue > maxIncome) {
+                    value = maxIncome - minIncome + 1;
+                }
             }
+            return value * taxPerDollar;
 
-        }
-
-        public Float getTaxPerDollar() {
-            return taxPerDollar;
         }
     }
 
-
 }
-
-
-
