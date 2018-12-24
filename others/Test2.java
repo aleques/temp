@@ -99,14 +99,14 @@ public class Test2 {
 
         if (countA <= countB) {
 
-            if ( (employeeA.manager != null && employeeA.manager.manager != null) && (employeeB.manager == null || employeeB.manager.manager == null) ) {
+            if ( (employeeA.manager != null && employeeA.manager.manager != null) || (employeeB.manager == null || employeeB.manager.manager == null) ) {
                 employee = employeeA;
             } else {
                 employee = employeeB;
             }
         } else {
 
-            if ( (employeeB.manager != null && employeeB.manager.manager != null) && (employeeA.manager == null || employeeA.manager.manager == null) ) {
+            if ( (employeeB.manager != null && employeeB.manager.manager != null) || (employeeA.manager == null || employeeA.manager.manager == null) ) {
                 employee = employeeB;
             } else {
                 employee = employeeA;
